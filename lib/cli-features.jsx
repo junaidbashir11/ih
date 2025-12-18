@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import  { useState } from 'react';
 
 const ProCLISection = () => {
+
     const [hoveredFeature, setHoveredFeature] = useState(null);
 
     const T = {
@@ -97,17 +98,17 @@ const ProCLISection = () => {
 
          {
             number: '01',
-            title: 'CLI Login : ihub login <walletname>',
+            title: 'CLI Login : npx ihub op login <walletname>',
             description: 'Use immutable hub cli to login into the cli',
         },
         {
             number: '02',
-            title: 'Code Push : ihub push <reponame>',
+            title: 'Code Push : npx ihub op  push <reponame>',
             description: 'Use immutable hub cli to push the code to our immutable & decentralized storage ',
         },
         {
             number: '03',
-            title: 'Code Clone : ihub clone <repoame> if new use flag as --new true ',
+            title: 'Code Clone : npx ihub op  clone <repoame> if new use flag as --new true ',
             description: 'Use immutable hub cli to clone the repo from our immutable & decentalized storage.',
         },
         

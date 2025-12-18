@@ -143,8 +143,8 @@ export async function OPTIONS() {
 
 export  async function GET(request,{params}) {
 
-    let wallet=await params.wallet
-    let dataobj=await getFolders(wallet)
+    let ps=await params
+    let dataobj=await getFolders(ps.wallet)
   return NextResponse.json(
 
       dataobj,

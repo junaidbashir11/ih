@@ -5,7 +5,6 @@ import { jwtDecode } from "jwt-decode";
 
 import { useState,useEffect } from 'react';
 
-import RepoExplorer from "../../lib/repoexplorer";
 import Link from "next/link";
 import ProCLISection from "../../lib/cli-features";
 
@@ -16,8 +15,24 @@ const GithubProDashboard = () => {
     const [folderName, setFolderName] = useState('');
     const [isCreating, setIsCreating] = useState(false);
     const [uploads,setUploads]=useState("")
+    const [decoded,setDecoded] =useState(null)
 
 
+
+    useEffect(()=>{
+
+    const token=localStorage.getItem("vjwt")
+    if(token) {
+        
+        const vjwt=localStorage.getItem("vjwt")
+        const decoded=jwtDecode(vjwt)
+        setDecoded(decoded)
+
+    }
+
+    },[])
+    
+     
 
 
      async function checkRepos(){
@@ -61,8 +76,8 @@ const GithubProDashboard = () => {
 
     },[])
 
-
-  
+    ////{activeTab === 'create-repo' && <CreateRepoContent styles={styles} T={T} />}
+    
 
 
     const handleCreateRepo=async ()=>{
@@ -101,6 +116,7 @@ const GithubProDashboard = () => {
         hoverBg: '#1c2128',
         successBg: '#1a7f3714',
         warningBg: '#9e640014',
+        accentYellow: '#f59e0b', 
     };
 
 
@@ -110,6 +126,14 @@ const GithubProDashboard = () => {
             minHeight: '100vh',
             backgroundColor: T.background,
             fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif',
+        },
+        heroSubtitle: {
+            fontSize: '24px',
+            color: T.textSecondary,
+            fontWeight: 400,
+            lineHeight: 1.6,
+            marginTop: '20px',
+            fontFamily: 'monospace, "Courier New"',
         },
         sidebar: {
             width: '280px',
@@ -393,9 +417,23 @@ const GithubProDashboard = () => {
                 onMouseLeave={() => setHoveredCard(null)}
                 >
                     <div style={styles.inputGroup}>
-                        <label style={styles.label}>Display Name</label>
+                        <label style={styles.label}>
+                            
+                          {decoded ? decoded.sub : ""}
+                            
+                        </label>
                 
                     </div>
+
+                     {/* UPDATED: Code-style decoration for subtitle */}
+                <p style={styles.heroSubtitle}>
+                    <span style={{ color: T.accentYellow, marginRight: '15px' }}>{'>_'}</span> 
+                    Login using cli : npx ihub op login [walletaddress] 
+                </p>
+                <p style={{...styles.heroSubtitle, fontSize: '20px', marginTop: '40px', color: T.accentBlue, opacity: 0.6}}>
+                    <span style={{ color: T.accentYellow, marginRight: '15px' }}>{'[ ]'}</span> 
+                
+                </p>
                    
                 </div>
             </div>
@@ -411,8 +449,24 @@ const GithubProDashboard = () => {
                 {localStorage.getItem("repos")=="yes"?(
                     <div>
 
+                    <Link
+  href="/folders"
+  className="
+    inline-flex items-center gap-2
+    px-4 py-2
+    rounded-lg
+    text-orange-500 font-mono text-xl
+    hover:bg-orange-500/10
+    hover:text-orange-400
+    transition
+    cursor-pointer
+  "
+>
+  <span className="text-2xl">^</span>
+  <span>[]REPOSITORIES</span>
+</Link>
 
-                    <Link href="/folders" className="text-white font-mono"><h1>REPOSITORIES</h1></Link>
+                   
                     <ProCLISection/>
 
                     </div>
@@ -467,7 +521,7 @@ const CreateRepoContent = () => (
                 onMouseLeave={() => setHoveredCard(null)}
                 >
                     <div style={styles.inputGroup}>
-                        <label style={styles.label}>Folder Name</label>
+                        <label style={styles.label}>Repo Name</label>
                         <input 
                             style={styles.input} 
                             type="text" 
@@ -591,7 +645,47 @@ const CreateRepoContent = () => (
                             <span style={styles.navIcon}>➕</span>
                             New Repository
                         </button>
-                    </div>
+
+
+                        <button
+  style={{
+    ...styles.navItem,
+    backgroundColor: activeTab === 'docs' ? T.hoverBg : 'transparent',
+    color: activeTab === 'docs' ? T.textPrimary : T.textSecondary,
+  }}
+  onClick={() => setActiveTab('docs')}
+  onMouseEnter={(e) => {
+    if (activeTab !== 'docs') e.currentTarget.style.backgroundColor = T.hoverBg;
+  }}
+  onMouseLeave={(e) => {
+    if (activeTab !== 'docs') e.currentTarget.style.backgroundColor = 'transparent';
+  }}
+>
+  <span style={styles.navIcon}>📄</span>
+  Docs
+</button>
+
+
+                        <button
+  style={{
+    ...styles.navItem,
+    backgroundColor: activeTab === 'support' ? T.hoverBg : 'transparent',
+    color: activeTab === 'support' ? T.textPrimary : T.textSecondary,
+  }}
+  onClick={() => setActiveTab('support')}
+  onMouseEnter={(e) => {
+    if (activeTab !== 'support') e.currentTarget.style.backgroundColor = T.hoverBg;
+  }}
+  onMouseLeave={(e) => {
+    if (activeTab !== 'support') e.currentTarget.style.backgroundColor = 'transparent';
+  }}
+>
+  <span style={styles.navIcon}>!</span>
+  Support
+</button>
+
+
+    </div>
                 </nav>
             </aside>
 
@@ -605,7 +699,74 @@ const CreateRepoContent = () => (
                 <div style={styles.contentArea}>
                     {activeTab === 'account' && <AccountContent />}
                     {activeTab === 'repos' && <ReposContent />}
-                    {activeTab === 'create-repo' && <CreateRepoContent styles={styles} T={T} />}
+                    
+                      { activeTab==="create-repo" && <div>
+                         <div>
+            <div style={styles.pageHeader}>
+                <div style={styles.breadcrumb}>
+                    <span>Repositories</span>
+                    <span>›</span>
+                    <span style={{color: T.textPrimary}}>New</span>
+                </div>
+                <h1 style={styles.pageTitle}>Create New Repository</h1>
+                <p style={styles.pageDescription}>
+                    Create a new immutable repository
+                </p>
+            </div>
+
+            <div style={styles.section}>
+                <div style={{
+                    ...styles.card,
+                    maxWidth: '600px',
+                    borderColor: hoveredCard === 'create-form' ? T.textPrimary : T.border,
+                }}
+                onMouseEnter={() => setHoveredCard('create-form')}
+                onMouseLeave={() => setHoveredCard(null)}
+                >
+                    <div style={styles.inputGroup}>
+                        <label style={styles.label}>Repo Name</label>
+                        <input 
+                            style={styles.input} 
+                            type="text" 
+                            placeholder="my-awesome-project"
+                            value={folderName}
+                            onChange={(e) => setFolderName(e.target.value)}
+                        />
+                    </div>
+                    <div style={{display: 'flex', gap: '8px'}}>
+                        <button 
+                            style={{
+                                ...styles.button,
+                                opacity: (!folderName.trim() || isCreating) ? 0.5 : 1,
+                                cursor: (!folderName.trim() || isCreating) ? 'not-allowed' : 'pointer',
+                            }}
+                            onClick={handleCreateRepo}
+                            disabled={!folderName.trim() || isCreating}
+                        >
+                            {isCreating ? 'Creating...' : 'Create Repository'}
+                        </button>
+                        <button 
+                            style={styles.buttonSecondary}
+                            onClick={() => {
+                                setActiveTab('repos');
+                                setFolderName('');
+                            }}
+                        >
+                            Cancel
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+                        
+                        
+    </div>
+    
+    }
+    {activeTab === 'docs' && <div></div>}
+    {activeTab === 'support' && <div></div>}
+   
+
                 </div>
             </main>
         </div>

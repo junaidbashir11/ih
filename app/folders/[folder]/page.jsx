@@ -10,9 +10,13 @@ export default function FolderDetail({ params }) {
 
   const decodedFolder = decodeURIComponent(folder);
 
-  if (loading) {
-    return <div className="bg-black-500">Loading…</div>;
-  }
+ 
+
+   if (loading) return  ( <div className="flex items-center justify-center h-screen bg-black">
+      <div className="animate-spin h-8 w-8 rounded-full border-4 border-white border-t-transparent" />
+      <span className="ml-3 text-white">Loading repository…</span>
+    </div>
+  )
 
   const found = uploads.find(f => f.folder === decodedFolder);
   const files = found?.data || [];
@@ -25,19 +29,39 @@ export default function FolderDetail({ params }) {
     accent: "text-[#A359FF]",
     hover: "hover:border-[#A359FF] hover:shadow-lg hover:shadow-[#A359FF]/10",
   };
-
+const navLinkClasses ="text-sm font-medium text-white/80 hover:text-white transition-colors cursor-pointer flex items-center gap-1";
   return (
     <div className={`${theme.bg} min-h-screen px-4 py-16`}>
       <div className="max-w-6xl mx-auto">
 
-        <header className="mb-10 border-b border-[#303036] pb-6">
-          <h1 className="text-3xl font-bold text-white">
-            {decodedFolder}
-          </h1>
-          <p className={theme.textSecondary}>
-            {files.length} objects
-          </p>
+         <div className="mb-10">
+        
+        
+          <header className="flex justify-between items-center pb-8 border-b border-[#303036] mb-10">
+            <Link href="/" className="text-3xl font-extrabold tracking-tight flex items-center gap-3">
+                <span className={`text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-500`}>ImmutableHub</span>
+                <span className={`text-xl font-medium ${theme.textSecondary}`}>{decodedFolder}</span>
+            </Link>
+            
+            <nav className="flex items-center space-x-6">
+                 <a href={process.env.NEXT_PUBLIC_TOKEN_LINK} className={navLinkClasses}>Token</a>
+                 <a className={navLinkClasses}>Docs</a>
+                  <Link href="/dashboard" className="text-cyan-500 font-mono text-sm" >Dash</Link>
+            </nav>
+
         </header>
+
+         
+
+
+          <p className={`mt-2 text-sm ${theme.textSecondary}`}>
+             {files.length}
+          </p>
+        </div>
+
+
+
+
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {files.length > 0 ? (
@@ -57,7 +81,7 @@ export default function FolderDetail({ params }) {
             ))
           ) : (
             <div className="col-span-full text-center text-gray-400">
-              Folder is empty
+              Repo is empty
             </div>
           )}
         </div>

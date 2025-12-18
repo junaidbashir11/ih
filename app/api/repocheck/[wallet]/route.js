@@ -29,7 +29,7 @@ export async function OPTIONS() {
 
 export async function  GET(request,{params}) {
 
-    let wallet=await params.wallet
+    let ps=await params
 
 
 
@@ -46,7 +46,7 @@ export async function  GET(request,{params}) {
          for(let obj of  manifests){
         
 
-          if(obj.id==wallet){
+          if(obj.id==ps.wallet){
             presence=true
               
            }

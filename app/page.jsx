@@ -182,29 +182,18 @@ export default function Home() {
                     <a className={navLinkClasses}>Features</a>
                     <a className={navLinkClasses}>Open Source</a>
                     <a className={navLinkClasses}>Pricing</a>
+            <a 
+              href="https://www.npmjs.com/~itsvelocity" 
+              className="w-9 h-9 flex items-center justify-center bg-white/10 backdrop-blur-md rounded-full border border-white/30 hover:bg-white/20 transition-all hover:scale-110"
+              aria-label="NPM"
+            >
+              <svg className="w-5 h-5 text-white" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M0 7.334v8h6.666v1.332H12v-1.332h12v-8H0zm6.666 6.664H5.334v-4H3.999v4H1.335V8.667h5.331v5.331zm4 0v1.336H8.001V8.667h5.334v5.332h-2.669v-.001zm12.001 0h-1.33v-4h-1.336v4h-1.335v-4h-1.33v4h-2.671V8.667h8.002v5.331zM10.665 10H12v2.667h-1.335V10z"/>
+              </svg>
+            </a>
                 </nav>
-
                 {/* Action Buttons on the Right */}
-                <div className="flex items-center space-x-4">
-                    <button className="text-white/80 hover:text-white transition-colors">
-                        {/* Search Icon Placeholder */}
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-                    </button>
-                    {/* Use token state to conditionally render Sign In/Out or Dashboard button */}
-                    {token ? (
-                        <button 
-                            className="text-sm font-medium border border-white/50 px-3 py-1.5 rounded-md hover:border-white transition-colors" 
-                            onClick={() => router.push("/dashboard")}
-                        >
-                            Dashboard
-                        </button>
-                    ) : (
-                        <>
-                            <a className="text-sm font-medium text-white/80 hover:text-white transition-colors" href="#">Sign in</a>
-                            <a className="text-sm font-medium border border-white/50 px-3 py-1.5 rounded-md hover:border-white transition-colors" href="#">Sign up</a>
-                        </>
-                    )}
-                </div>
+               
             </header>
             
             {/* --- 2. Main Content and Hero Section --- */}

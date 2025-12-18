@@ -1,17 +1,21 @@
 "use client";
 
-import { useEffect, useState,use } from "react";
+import {use } from "react";
 import Link from "next/link";
 import { useRepoData } from "@/lib/useRepoData";
 
 export default function FilePage({ params }) {
 
   const { folder, cid } = use(params);
-  //const [file, setFile] = useState(null);
   const decoded = decodeURIComponent(folder);
   const { uploads, loading } = useRepoData();
 
-  if (loading) return <div className="bg-black-500">Loading…</div>;
+  if (loading) return  ( <div className="flex items-center justify-center h-screen bg-black">
+      <div className="animate-spin h-8 w-8 rounded-full border-4 border-white border-t-transparent" />
+      <span className="ml-3 text-white">Loading repository…</span>
+    </div>
+  )
+
   const file =
     uploads
       .find(f => f.folder === decoded)
@@ -54,9 +58,11 @@ export default function FilePage({ params }) {
             </Link>
             
             <nav className="flex items-center space-x-6">
-                 <a className={navLinkClasses}>Token</a>
+                 <a  href={process.env.NEXT_PUBLIC_TOKEN_LINK} className={navLinkClasses}>Token</a>
                  <a className={navLinkClasses}>Docs</a>
+                  <Link href="/dashboard" className="text-cyan-500 font-mono text-sm" >Dash</Link>
             </nav>
+
         </header>
 
          
