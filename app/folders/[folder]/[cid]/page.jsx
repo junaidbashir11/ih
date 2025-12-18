@@ -53,7 +53,7 @@ export default function FilePage({ params }) {
         
           <header className="flex justify-between items-center pb-8 border-b border-[#303036] mb-10">
             <Link href="/" className="text-3xl font-extrabold tracking-tight flex items-center gap-3">
-                <span className={`text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-500`}>ImmutableHub</span>
+                 <span className={`text-white bg-clip-text`}>ImmutableHub</span>
                 <span className={`text-xl font-medium ${theme.textSecondary}`}>— </span>
             </Link>
             

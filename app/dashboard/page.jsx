@@ -7,7 +7,8 @@ import { useState,useEffect } from 'react';
 
 import Link from "next/link";
 import ProCLISection from "../../lib/cli-features";
-
+import DocsSection from "../../lib/docs";
+import SupportSection from "../../lib/support";
 
 const GithubProDashboard = () => {
     const [activeTab, setActiveTab] = useState('account');
@@ -401,7 +402,7 @@ const GithubProDashboard = () => {
                     <span>›</span>
                     <span style={{color: T.textPrimary}}>Account</span>
                 </div>
-                <h1 style={styles.pageTitle}>Account Settings</h1>
+                <h1 style={styles.pageTitle}>Account</h1>
                 
             </div>
 
@@ -449,21 +450,26 @@ const GithubProDashboard = () => {
                 {localStorage.getItem("repos")=="yes"?(
                     <div>
 
-                    <Link
+<Link
   href="/folders"
   className="
-    inline-flex items-center gap-2
-    px-4 py-2
-    rounded-lg
-    text-orange-500 font-mono text-xl
+    flex items-center justify-between
+    w-full max-w-sm
+    px-6 py-3
+    rounded-xl
+    border border-orange-500/30
+    text-orange-500 font-mono text-lg
     hover:bg-orange-500/10
-    hover:text-orange-400
+    hover:shadow-lg
     transition
     cursor-pointer
   "
 >
-  <span className="text-2xl">^</span>
-  <span>[]REPOSITORIES</span>
+  <div className="flex items-center gap-3">
+    <span className="text-2xl">^</span>
+    <span>[]REPOSITORIES</span>
+  </div>
+  <span className="text-orange-400 text-xl">{'→'}</span>
 </Link>
 
                    
@@ -574,15 +580,11 @@ const CreateRepoContent = () => (
                         
                         <div>
 
-<h1 className="text-2xl md:text-2xl font-bold tracking-tight leading-none mb-6">
+<h1 className="text-4xl md:text-4xl font-bold tracking-tight leading-none mb-6">
                     
-                
-                    <p className="text-white">Immutable  &  Decentralized  </p>
-                    <span className="block mt-2">
-                        <span className="text-fuchsia-400 opacity-70">{'{'}</span>
-                        <span className="ml-4 text-white">Code</span>
-                        <span className="text-fuchsia-400 opacity-70">{'}'}</span>
-                    </span>
+    <span className="text-purple-400 opacity-70">// █ </span> 
+    <p className="text-white">ImmutableHub </p>
+                    
 </h1>
 
                         </div>
@@ -763,8 +765,8 @@ const CreateRepoContent = () => (
     </div>
     
     }
-    {activeTab === 'docs' && <div></div>}
-    {activeTab === 'support' && <div></div>}
+    {activeTab === 'docs' && <div><DocsSection/></div>}
+    {activeTab === 'support' && <div><SupportSection/></div>}
    
 
                 </div>

@@ -5,6 +5,7 @@ const ProCLISection = () => {
     const [hoveredFeature, setHoveredFeature] = useState(null);
 
     const T = {
+
         background: '#0d1117', // Match ImmutableHub background
         cardBackground: '#0a0a0f',
         textPrimary: '#ffffff',
@@ -103,12 +104,12 @@ const ProCLISection = () => {
         },
         {
             number: '02',
-            title: 'Code Push : npx ihub op  push <reponame>',
+            title: 'Code Push : npx ihub op  push <repopath>',
             description: 'Use immutable hub cli to push the code to our immutable & decentralized storage ',
         },
         {
             number: '03',
-            title: 'Code Clone : npx ihub op  clone <repoame> if new use flag as --new true ',
+            title: 'Code Clone : npx ihub op  clone <reponame> if new use flag as --new true ',
             description: 'Use immutable hub cli to clone the repo from our immutable & decentalized storage.',
         },
         

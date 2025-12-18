@@ -19,6 +19,7 @@ export default function FolderPage() {
 
   const theme = {
     bg: "bg-gradient-to-br from-[#0a0a0d] via-[#0e0e14] to-[#050507]",
+    //bg:"bg-darkgray-500",
     card: "bg-[#101014] border border-[#303036]",
     textPrimary: "text-white",
     textSecondary: "text-[#a0a0a9]",
@@ -36,7 +37,7 @@ export default function FolderPage() {
     
         <header className="flex justify-between items-center pb-8 border-b border-[#303036] mb-10">
             <Link href="/" className="text-3xl font-extrabold tracking-tight flex items-center gap-3">
-                <span className={`text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-500`}>ImmutableHub</span>
+                <span className={`text-white bg-clip-text`}>ImmutableHub</span>
                 <span className={`text-xl font-medium ${theme.textSecondary}`}>— Repos</span>
             </Link>
             

@@ -148,8 +148,8 @@ const TimelineRoadmap = () => {
         },
         { 
             title: 'MCP Registry', 
-            description: 'A centralized, version-controlled registry for managing multi-cloud/chain components, templates, and decentralized application artifacts.', 
-            details: ['Secure asset storage', 'Component version control', 'Provider agnostic access'], 
+            description: 'A centralized registry for MCP tools', 
+            details: ['Model Context Protocol', 'AI agent usable', 'Autonomous workflows'], 
             phase: 1,
             order: 2
         },

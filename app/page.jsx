@@ -89,8 +89,8 @@ export default function Home() {
 
     const config={
         wallet:wallet,
-        required_mint:"3d4XyPWkUJzruF5c2qc1QfpLgsaNaDLMtTya1bWBpump",
-        mint_amount:"0.0",
+        required_mint:process.env.NEXT_PUBLIC_TOKEN,
+        mint_amount:process.env.NEXT_PUBLIC_AMOUNT,
         geo_code:"false",
         geo_code_locs:"",
         coords:{
@@ -175,13 +175,12 @@ export default function Home() {
                         <span className="text-white">ImmutableHub</span>
                     </div>
                     
-                    <a className={navLinkClasses}>
-                        Platform 
-                        <svg className="w-3 h-3 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
-                    </a>
-                    <a className={navLinkClasses}>Features</a>
-                    <a className={navLinkClasses}>Open Source</a>
-                    <a className={navLinkClasses}>Pricing</a>
+                   
+                
+                    <a  href="https://github.com/immutablehub" className={navLinkClasses}>Open Source</a>
+                     <a  href={process.env.NEXT_PUBLIC_TOKEN_LINK} className={navLinkClasses}>Token</a>
+                     <a  href="/docs" className={navLinkClasses}>Docs</a>
+                    
             <a 
               href="https://www.npmjs.com/~itsvelocity" 
               className="w-9 h-9 flex items-center justify-center bg-white/10 backdrop-blur-md rounded-full border border-white/30 hover:bg-white/20 transition-all hover:scale-110"
