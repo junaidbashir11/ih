@@ -4,10 +4,10 @@ import { NextResponse } from 'next/server';
 import { PinataSDK } from "pinata";
 
 
-const pinata = new PinataSDK({
-   
-    pinataJwt:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mb3JtYXRpb24iOnsiaWQiOiIxY2UxYThmMC1hMDQ3LTQ0YjEtYWU2Yy02MGUwMTMwYTMzODUiLCJlbWFpbCI6ImFydGljdmF1bHQwMEBnbWFpbC5jb20iLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwicGluX3BvbGljeSI6eyJyZWdpb25zIjpbeyJkZXNpcmVkUmVwbGljYXRpb25Db3VudCI6MSwiaWQiOiJGUkExIn0seyJkZXNpcmVkUmVwbGljYXRpb25Db3VudCI6MSwiaWQiOiJOWUMxIn1dLCJ2ZXJzaW9uIjoxfSwibWZhX2VuYWJsZWQiOmZhbHNlLCJzdGF0dXMiOiJBQ1RJVkUifSwiYXV0aGVudGljYXRpb25UeXBlIjoic2NvcGVkS2V5Iiwic2NvcGVkS2V5S2V5IjoiNTBhMzQ2OGI1YWU2MDgwMWE2NjYiLCJzY29wZWRLZXlTZWNyZXQiOiJhOTQ3YzgwNDIwNjk4MzljYjM5M2M5OTZkZDI3M2MzNWVhNWZmMDY5Y2UwMGNiMmE3NzQwYWMwOTZmYTJiZmM1IiwiZXhwIjoxNzk2ODMyMDcxfQ.gGWPJph2vqrEKhTtJdSo5cg1Btix7TpRM2tt2jBYXlY",
-    pinataGateway:"coral-petite-bandicoot-821.mypinata.cloud",
+const pinata = new PinataSDK(
+    {
+    pinataJwt:process.env.NEXT_PUBLIC_PJWT,
+    pinataGateway:process.env.NEXT_PUBLIC_PGATE
 });
 
 
