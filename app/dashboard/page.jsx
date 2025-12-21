@@ -9,6 +9,8 @@ import Link from "next/link";
 import ProCLISection from "../../lib/cli-features";
 import DocsSection from "../../lib/docs";
 import SupportSection from "../../lib/support";
+import { useRouter } from "next/navigation";
+
 
 const GithubProDashboard = () => {
     const [activeTab, setActiveTab] = useState('account');
@@ -17,23 +19,31 @@ const GithubProDashboard = () => {
     const [isCreating, setIsCreating] = useState(false);
     const [uploads,setUploads]=useState("")
     const [decoded,setDecoded] =useState(null)
+    const [version,setVersion]=useState("normal")
+    const [prompt,setPrompt]=useState("")
+    const [checked, setChecked] = useState(false)
+    const router = useRouter();
 
 
 
-    useEffect(()=>{
-
-    const token=localStorage.getItem("vjwt")
-    if(token) {
-        
-        const vjwt=localStorage.getItem("vjwt")
-        const decoded=jwtDecode(vjwt)
-        setDecoded(decoded)
-
+    useEffect(() => {
+    const token = localStorage.getItem("vjwt")
+    
+    if (!token) {
+      router.replace("/")
+      return
     }
 
-    },[])
+    try {
+      const decoded = jwtDecode(token)
+      //setChecked(true)
+      setDecoded(decoded)
+    } catch {
+      //localStorage.removeItem("vjwt")
+      router.replace("/")
+    }
+  }, [])
     
-     
 
 
      async function checkRepos(){
@@ -79,12 +89,25 @@ const GithubProDashboard = () => {
 
     ////{activeTab === 'create-repo' && <CreateRepoContent styles={styles} T={T} />}
     
-
+    const handleChange = (event) => {
+    setVersion(event.target.value);
+  };
 
     const handleCreateRepo=async ()=>{
 
+        if(folderName==""){
 
-        let request=await fetch("http://localhost:3000/api/repo/create",{
+            alert("empty reponame")
+
+        }
+        else {
+
+        let url=""
+        if(version=="normal"){
+
+            setIsCreating(true)
+            url="/api/repo/create"
+            let request=await fetch(url,{
             mode:"cors",
             method:"post",
             body:JSON.stringify({"wallet":"HYUFyAnmGKsm6Qwjp5D2U6VyNNcCt4UpBox2occw5vLj","foldername":folderName}),
@@ -92,15 +115,51 @@ const GithubProDashboard = () => {
                 "content-type":"application/json"
             }
         })
-       let response=await request.json()
-       if(response.status_==true){
-        alert("repo created , check the repo section")
-       }
-      else if (response.status_==false){
-        alert("repo not created , error")
-      }
+            let response=await request.json()
+            if(response.success==true){
+                alert("repo created , check the repo section")
+            }
+            else if (response.success==false){
+                alert("repo not created , error")
+            }
+            setIsCreating(false)
+
+
+        }
+/*
+        else{
+
+            setIsCreating(true)
+            url="/api/repo/createjs"
+            let request=await fetch(url,{
+                mode:"cors",
+                method:"post",
+                body:JSON.stringify({
+                    wallet:"HYUFyAnmGKsm6Qwjp5D2U6VyNNcCt4UpBox2occw5vLj",
+                    foldername:folderName,
+                    prompt:prompt
+            }),
+            headers:{
+                "content-type":"application/json"
+            }
+        })
+            let response=await request.json()
+            if(response.success==true){
+            alert("repo created , check the repo section")
+            }
+            else if (response.success==false){
+                alert("repo not created , error")
+            }
+            setIsCreating(false)
+        }
+  */    
+       
+
+
 
     }
+    }
+
 
     const T = {
         background: '#0d1117',
@@ -315,7 +374,7 @@ const GithubProDashboard = () => {
             padding: '8px 12px',
             fontSize: '14px',
             color: T.textPrimary,
-            backgroundColor: T.background,
+            backgroundColor:'black',
             border: `1px solid ${T.border}`,
             borderRadius: '6px',
             outline: 'none',
@@ -392,54 +451,191 @@ const GithubProDashboard = () => {
             color: T.textSecondary,
             marginBottom: '16px',
         },
-    };
+        tabContainer: {
+    padding: '40px 20px',
+    maxWidth: '1200px',
+    margin: '0 auto',
+    animation: 'fadeIn 0.3s ease-in-out', // Assuming you have a keyframe
+  },
+  breadcrumb: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '8px',
+    fontSize: '14px',
+    marginBottom: '16px',
+  },
+  breadcrumbLink: {
+    color: T.textSecondary,
+    cursor: 'pointer',
+    transition: 'color 0.2s',
+  },
+  breadcrumbSeparator: {
+    color: T.border,
+  },
+  breadcrumbActive: {
+    color: T.textPrimary,
+    fontWeight: '500',
+  },
+  pageTitle: {
+    fontSize: '28px',
+    fontWeight: '600',
+    color: T.textPrimary,
+    margin: '0 0 8px 0',
+  },
+  pageDescription: {
+    fontSize: '16px',
+    color: T.textSecondary,
+    marginBottom: '32px',
+  },
+  card: {
+    backgroundColor: T.cardBg, // e.g., #ffffff
+    borderRadius: '12px',
+    border: `1px solid ${T.border}`,
+    padding: '32px',
+    maxWidth: '600px',
+    boxShadow: '0 4px 12px rgba(0,0,0,0.05)',
+    transition: 'all 0.2s ease-in-out',
+  },
+  label: {
+    display: 'block',
+    fontSize: '14px',
+    fontWeight: '500',
+    marginBottom: '8px',
+    color: T.textPrimary,
+  },
+  input: {
+    width: '100%',
+    padding: '10px 12px',
+    borderRadius: '6px',
+    border: `1px solid ${T.border}`,
+    fontSize: '15px',
+    outline: 'none',
+    transition: 'border-color 0.2s, box-shadow 0.2s',
+    boxSizing: 'border-box',
+    color:"white"
+    // On focus, you should dynamically add: 
+    // boxShadow: `0 0 0 3px ${T.accentLight}`
+  },
+  inputHint: {
+    fontSize: '12px',
+    color: T.textSecondary,
+    marginTop: '8px',
+  },
+  buttonGroup: {
+    display: 'flex',
+    gap: '12px',
+    marginTop: '24px',
+    paddingTop: '24px',
+    borderTop: `1px solid ${T.border}`,
+  },
+  buttonPrimary: {
+    backgroundColor: T.accent, // e.g., #007bff
+    color: '#fff',
+    border: 'none',
+    padding: '10px 20px',
+    borderRadius: '6px',
+    fontWeight: '500',
+    fontSize: '14px',
+    transition: 'background 0.2s',
+  },
+  buttonSecondary: {
+    backgroundColor: 'transparent',
+    color: T.textPrimary,
+    border: `1px solid ${T.border}`,
+    padding: '10px 20px',
+    borderRadius: '6px',
+    fontWeight: '500',
+    fontSize: '14px',
+    cursor: 'pointer',
+    transition: 'background 0.2s',
+  }
+    };2
 
-    const AccountContent = () => (
-        <div>
-            <div style={styles.pageHeader}>
-                <div style={styles.breadcrumb}>
-                    <span>Settings</span>
-                    <span>›</span>
-                    <span style={{color: T.textPrimary}}>Account</span>
-                </div>
-                <h1 style={styles.pageTitle}>Account</h1>
-                
+ const AccountContent = () => (
+    <div style={{ maxWidth: '1000px' }}>
+        {/* TOP BAR / BREADCRUMB */}
+        <div style={{ ...styles.pageHeader, borderLeft: `4px solid ${T.textPrimary}`, paddingLeft: '20px', marginBottom: '40px' }}>
+            <div style={{ ...styles.breadcrumb, textTransform: 'uppercase', letterSpacing: '0.2em', fontSize: '10px', opacity: 0.5 }}>
+                <span>Settings</span>
+                <span style={{ margin: '0 10px' }}>//</span>
+                <span style={{ color: T.textPrimary }}>Account_Protocol</span>
+            </div>
+            <h1 style={{ ...styles.pageTitle, fontSize: '48px', fontWeight: '900', textTransform: 'uppercase', letterSpacing: '-0.02em', margin: '10px 0' }}>
+                System Identity
+            </h1>
+        </div>
+
+        {/* PROFILE SECTION */}
+        <div style={styles.section}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '15px', marginBottom: '20px' }}>
+                <div style={{ width: '8px', h: '8px', background: T.textPrimary }}></div>
+                <h2 style={{ ...styles.sectionTitle, fontSize: '14px', textTransform: 'uppercase', letterSpacing: '0.3em', margin: 0 }}>
+                    Active Session Data
+                </h2>
             </div>
 
-            <div style={styles.section}>
-                <div style={styles.sectionHeader}>
-                    <h2 style={styles.sectionTitle}>Profile</h2>
-                </div>
-                <div style={{
+            <div 
+                style={{
                     ...styles.card,
-                    borderColor: hoveredCard === 'profile' ? T.textPrimary : T.border,
+                    background: 'rgba(255,255,255,0.02)',
+                    borderRadius: '0', // Sharp corners for brutalist look
+                    border: '1px solid',
+                    borderColor: hoveredCard === 'profile' ? T.textPrimary : 'rgba(255,255,255,0.1)',
+                    padding: '30px',
+                    transition: 'all 0.2s ease-in-out',
+                    position: 'relative',
+                    overflow: 'hidden'
                 }}
                 onMouseEnter={() => setHoveredCard('profile')}
                 onMouseLeave={() => setHoveredCard(null)}
-                >
-                    <div style={styles.inputGroup}>
-                        <label style={styles.label}>
-                            
-                          {decoded ? decoded.sub : ""}
-                            
-                        </label>
-                
-                    </div>
+            >
+                {/* Decorative corner tag */}
+                <div style={{ position: 'absolute', top: 0, right: 0, padding: '4px 8px', background: 'rgba(255,255,255,0.1)', fontSize: '8px', color: 'rgba(255,255,255,0.4)', fontFamily: 'monospace' }}>
+                    SECURE NODE
+                </div>
 
-                     {/* UPDATED: Code-style decoration for subtitle */}
-                <p style={styles.heroSubtitle}>
-                    <span style={{ color: T.accentYellow, marginRight: '15px' }}>{'>_'}</span> 
-                    Login using cli : npx ihub op login [walletaddress] 
-                </p>
-                <p style={{...styles.heroSubtitle, fontSize: '20px', marginTop: '40px', color: T.accentBlue, opacity: 0.6}}>
-                    <span style={{ color: T.accentYellow, marginRight: '15px' }}>{'[ ]'}</span> 
-                
-                </p>
-                   
+                <div style={styles.inputGroup}>
+                    <label style={{ ...styles.label, display: 'block', fontSize: '10px', color: 'rgba(255,255,255,0.4)', textTransform: 'uppercase', marginBottom: '10px', letterSpacing: '0.1em' }}>
+                        Authenticated Address
+                    </label>
+                    <div style={{ 
+                        fontFamily: 'monospace', 
+                        fontSize: '18px', 
+                        color: T.textPrimary,
+                        background: 'rgba(0,0,0,0.3)',
+                        padding: '15px',
+                        borderLeft: `2px solid ${T.accentBlue || '#555'}` 
+                    }}>
+                        {decoded ? decoded.sub : "NO_SESSION_DETECTED"}
+                    </div>
+                </div>
+
+                {/* CLI INSTRUCTION BOX */}
+                <div style={{ marginTop: '30px', padding: '20px', border: '1px dashed rgba(255,255,255,0.1)', background: 'rgba(0,0,0,0.2)' }}>
+                    <p style={{ ...styles.heroSubtitle, margin: 0, display: 'flex', alignItems: 'center', fontFamily: 'monospace', fontSize: '13px' }}>
+                        <span style={{ color: T.accentYellow, marginRight: '15px', fontWeight: 'bold' }}>{'>_'}</span> 
+                        <span style={{ color: 'rgba(255,255,255,0.6)' }}>Login via CLI:</span>
+                        <code style={{ marginLeft: '10px', color: '#fff', background: 'rgba(255,255,255,0.1)', padding: '2px 8px' }}>
+                            npx ihub op login [walletaddress]
+                        </code>
+                    </p>
+                </div>
+
+                {/* Status Bar Decoration */}
+                <div style={{ marginTop: '20px', display: 'flex', gap: '20px' }}>
+                   <div style={{ fontSize: '10px', color: T.accentBlue, opacity: 0.6, fontFamily: 'monospace' }}>
+                        <span style={{ marginRight: '5px' }}>[x]</span> STATUS: OPERATIONAL
+                   </div>
+                   <div style={{ fontSize: '10px', color: 'rgba(255,255,255,0.2)', fontFamily: 'monospace' }}>
+                        <span style={{ marginRight: '5px' }}>[ ]</span> SYNC: 100%
+                   </div>
                 </div>
             </div>
         </div>
-    );
+    </div>
+);
+
+
 
     const ReposContent = () => (
        
@@ -499,69 +695,7 @@ const GithubProDashboard = () => {
        </div>
     );
 
-   
-const CreateRepoContent = () => (
 
-      
-        
-        <div>
-            <div style={styles.pageHeader}>
-                <div style={styles.breadcrumb}>
-                    <span>Repositories</span>
-                    <span>›</span>
-                    <span style={{color: T.textPrimary}}>New</span>
-                </div>
-                <h1 style={styles.pageTitle}>Create New Repository</h1>
-                <p style={styles.pageDescription}>
-                    Create a new immutable repository
-                </p>
-            </div>
-
-            <div style={styles.section}>
-                <div style={{
-                    ...styles.card,
-                    maxWidth: '600px',
-                    borderColor: hoveredCard === 'create-form' ? T.textPrimary : T.border,
-                }}
-                onMouseEnter={() => setHoveredCard('create-form')}
-                onMouseLeave={() => setHoveredCard(null)}
-                >
-                    <div style={styles.inputGroup}>
-                        <label style={styles.label}>Repo Name</label>
-                        <input 
-                            style={styles.input} 
-                            type="text" 
-                            placeholder="my-awesome-project"
-                            value={folderName}
-                            onChange={(e) => setFolderName(e.target.value)}
-                        />
-                    </div>
-                    <div style={{display: 'flex', gap: '8px'}}>
-                        <button 
-                            style={{
-                                ...styles.button,
-                                opacity: (!folderName.trim() || isCreating) ? 0.5 : 1,
-                                cursor: (!folderName.trim() || isCreating) ? 'not-allowed' : 'pointer',
-                            }}
-                            onClick={handleCreateRepo}
-                            disabled={!folderName.trim() || isCreating}
-                        >
-                            {isCreating ? 'Creating...' : 'Create Repository'}
-                        </button>
-                        <button 
-                            style={styles.buttonSecondary}
-                            onClick={() => {
-                                setActiveTab('repos');
-                                setFolderName('');
-                            }}
-                        >
-                            Cancel
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    );
 
 
 
@@ -580,9 +714,8 @@ const CreateRepoContent = () => (
                         
                         <div>
 
-<h1 className="text-4xl md:text-4xl font-bold tracking-tight leading-none mb-6">
+<h1 className="text-3xl md:text-3xl font-black  tracking-tight leading-none mb-6">
                     
-    <span className="text-purple-400 opacity-70">// █ </span> 
     <p className="text-white">ImmutableHub </p>
                     
 </h1>
@@ -702,74 +835,83 @@ const CreateRepoContent = () => (
                     {activeTab === 'account' && <AccountContent />}
                     {activeTab === 'repos' && <ReposContent />}
                     
-                      { activeTab==="create-repo" && <div>
-                         <div>
-            <div style={styles.pageHeader}>
-                <div style={styles.breadcrumb}>
-                    <span>Repositories</span>
-                    <span>›</span>
-                    <span style={{color: T.textPrimary}}>New</span>
-                </div>
-                <h1 style={styles.pageTitle}>Create New Repository</h1>
-                <p style={styles.pageDescription}>
-                    Create a new immutable repository
-                </p>
-            </div>
+    {activeTab === "create-repo" && (
+  <div style={styles.tabContainer}>
+    {/* Breadcrumb & Header using the Screenshot's styling */}
 
-            <div style={styles.section}>
-                <div style={{
-                    ...styles.card,
-                    maxWidth: '600px',
-                    borderColor: hoveredCard === 'create-form' ? T.textPrimary : T.border,
-                }}
-                onMouseEnter={() => setHoveredCard('create-form')}
-                onMouseLeave={() => setHoveredCard(null)}
-                >
-                    <div style={styles.inputGroup}>
-                        <label style={styles.label}>Repo Name</label>
-                        <input 
-                            style={styles.input} 
-                            type="text" 
-                            placeholder="my-awesome-project"
-                            value={folderName}
-                            onChange={(e) => setFolderName(e.target.value)}
-                        />
-                    </div>
-                    <div style={{display: 'flex', gap: '8px'}}>
-                        <button 
-                            style={{
-                                ...styles.button,
-                                opacity: (!folderName.trim() || isCreating) ? 0.5 : 1,
-                                cursor: (!folderName.trim() || isCreating) ? 'not-allowed' : 'pointer',
-                            }}
-                            onClick={handleCreateRepo}
-                            disabled={!folderName.trim() || isCreating}
-                        >
-                            {isCreating ? 'Creating...' : 'Create Repository'}
-                        </button>
-                        <button 
-                            style={styles.buttonSecondary}
-                            onClick={() => {
-                                setActiveTab('repos');
-                                setFolderName('');
-                            }}
-                        >
-                            Cancel
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-                        
-                        
+    {isCreating==true?<div className="animate-pulse text-white font-mono">creating..</div>:<div></div>}
+  
+    <div style={{ ...styles.pageHeader, borderLeft: `4px solid ${T.textPrimary}`, paddingLeft: '20px', marginBottom: '40px' }}>
+      <div style={styles.breadcrumb}>
+        <span style={styles.breadcrumbLink}>SETTINGS</span>
+        <span style={styles.breadcrumbSeparator}>//</span>
+        <span style={styles.breadcrumbActive}>REPO_INITIALIZATION</span>
+      </div>
+      <h1 style={{ ...styles.pageTitle, fontSize: '48px', fontWeight: '900', textTransform: 'uppercase', letterSpacing: '-0.02em', margin: '10px 0' }}>
+                CREATE NEW REPO
+    </h1>
     </div>
+
+    <div style={styles.layoutGrid}>
+      {/* Left Side: The Form */}
+      <div 
+        style={{
+          ...styles.card,
+          borderColor: hoveredCard === 'create-form' ? T.textPrimary : '',
+        }}
+        onMouseEnter={() => setHoveredCard('create-form')}
+        onMouseLeave={() => setHoveredCard(null)}
+      >
+        
+        <div style={styles.inputGroup}>
+          <label style={styles.label}>REPOSITORY_IDENTIFIER</label>
+          <input 
+            style={styles.input} 
+            type="text" 
+            placeholder="e.g. protocol-v1"
+            value={folderName}
+            onChange={(e) => setFolderName(e.target.value)}
+          />
+        </div>
+
+        <div style={styles.buttonGroup}>
+
+       
+          
+         <button
+         style={styles.buttonPrimary}
+         onClick={()=>handleCreateRepo()}
+
+         >
+            create repo
+         </button>
+          <button style={styles.buttonSecondary} onClick={() => setActiveTab('repos')}>
+            CANCEL
+          </button>
+        </div> <br/><br/>
+      
     
-    }
+      </div>
+
+      {/* Right Side: Filler / Technical
+       Specs */}
+      <div style={styles.sidePanel}>
+        <div style={styles.sideHeader}></div>
+        <div style={styles.fillerText}>
+        </div>
+      </div>
+    </div>
+  </div>
+)}
+
+
+
+
+
+
     {activeTab === 'docs' && <div><DocsSection/></div>}
     {activeTab === 'support' && <div><SupportSection/></div>}
-   
-
-                </div>
+   </div>
             </main>
         </div>
     );

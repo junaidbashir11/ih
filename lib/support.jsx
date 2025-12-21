@@ -2,8 +2,8 @@ import Link from "next/link";
 
 const SupportSection = () => {
   const T = {
-    bg: "#0b0b0e",
-    panel: "#111113",
+    bg: "",
+    panel: "",
     border: "rgba(255,255,255,0.08)",
     textPrimary: "#ffffff",
     textSecondary: "#a1a1aa",

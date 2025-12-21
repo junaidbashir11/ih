@@ -1,340 +1,139 @@
 "use client";
 
 import { jwtDecode } from "jwt-decode";
-import { detectWallets ,getGeolocationData,VelocityAuth} from "velocitytunedx401"
-import { useState ,useEffect} from "react";
-import { useRouter } from 'next/navigation';
-import TimelineRoadmap from "../lib/roadmap"
-import ProHeroSection from "../lib/features"
-
-// Define utility classes for navigation links
-const navLinkClasses ="text-sm font-medium text-white/80 hover:text-white transition-colors cursor-pointer flex items-center gap-1";
-
-
-
+import { useEffect, useState } from "react";
+import TimelineRoadmap from "../lib/roadmap";
+import Header from "../lib/header";
+import TypingDiv from "@/lib/typ";
+import { motion } from "framer-motion";
+import Hero from "../lib/ha";
+import { useRouter } from "next/navigation";
 
 
 export default function Home() {
+  const [token, setToken] = useState(null);
+  const router = useRouter();
 
-    const [showPopup, setShowPopup] = useState(false);
-    const [wallets, setWallets] = useState([]);
-    const [location, setLocation] = useState({
-        latitude: null,
-        longitude: null,
-        error: null,
-        isFetching: false,
-    });
-    const [token, setToken] = useState(null)
-    const router = useRouter();
+  useEffect(() => {
+    setToken(localStorage.getItem("vjwt"));
+  }, []);
 
+  useEffect(() => {
+    const token = localStorage.getItem("vjwt")
+    //alert("run")
+    if (!token) {
+      router.replace("/")
+      return
+    }
 
-    useEffect(() => {
-    setToken(localStorage.getItem("vjwt"))
-    }, [])
+    try {
+      
+      router.replace("/dashboard")
+    } catch {
+      //localStorage.removeItem("vjwt")
+      router.replace("/")
+    }
+  }, [token])
 
-    useEffect(()=>{
-        let token=localStorage.getItem("vjwt")
-        if(!token){
-            // If the user is on the root path and has no token, no redirect needed,
-            // but if they are trying to access a protected page, the push to "/" handles it.
-            // Since this is the Home page ("/"), we can skip the router.push("/") here.
-        }
-        else if(token){
-            // Optionally redirect to dashboard if already authenticated
-            // router.push("/dashboard") 
-        }
+  return (
+    <div className="min-h-screen bg-[#050505] text-[#E0E0E0] font-mono selection:bg-white selection:text-black">
+      
+      {/* BRUTALIST OVERLAY */}
+      <div className="fixed inset-0 z-0 pointer-events-none opacity-10"></div>
 
-    },[token])
+      <Header />
 
-
-    useEffect(() => {
-        async function fetchLocation() {
-            // Set isFetching to true while waiting for location data
-            setLocation(prev => ({ ...prev, isFetching: true }));
-
-            const locationdata = await getGeolocationData(); 
-    
-            setLocation({
-                latitude: locationdata.latitude || null, 
-                longitude: locationdata.longitude || null,
-                error: locationdata.error || null,
-                isFetching: false,
-            });
-            console.log("Location Data:", locationdata)
-        }
-
-        fetchLocation(); 
-    }, []);
-
-    useEffect(() => {
-        let wallets=detectWallets()
-        setWallets(wallets)
-    }, []);
-
-
-    const getWalletIcon = (walletName) => {
-        const icons = {
-        metamask: "", // You should define an icon path for Metamask
-        phantom: "/plogo.png",
-        solflare:"/solflare.svg"
+      <main className="relative z-10">
         
-    };
-
-    // Assuming detectWallets returns the lowercase name of the wallet (e.g., "phantom", "solflare")
-    return icons[walletName.toLowerCase()] || ""; 
-    }
-
-
-    const LOGGER=async (wallet)=>{
-
-    const config={
-        wallet:wallet,
-        required_mint:process.env.NEXT_PUBLIC_TOKEN,
-        mint_amount:process.env.NEXT_PUBLIC_AMOUNT,
-        geo_code:"false",
-        geo_code_locs:"",
-        coords:{
-            latitude:location.latitude,
-            longitude:location.longitude
-        },
-        device_auth:false
-    }
-
-    const result=await VelocityAuth(config)
-
-        if(result.success){
-
-        if(result.alreadyAuthenticated) {
-            alert("Already authenticated")
-            console.log(result.token)
-            setToken(result.token) // Update token state
-        }
-        else if(result.alreadyAuthenticated==false){
-            
-            console.log(result.token)
-            localStorage.setItem("vjwt",result.token)
-            alert("Authenticated successfully")
-            let token=localStorage.getItem("vjwt")  
-            const decoded = jwtDecode(token);
-            console.log(decoded)
-            setToken(token) // Update token state
-        }
-
-
-        }
-        else{
-
-            switch(result.error){
-
-                case "INSUFFICIENT_TOKENS":
-
-                    alert(`You need ${result.required} tokens to access`);
-                    break;
-
-                case "LOCATION_DENIED":
-
-                    alert("Access denied for your location");
-                    break;
-
-                case "LOCATION_ERROR":
-                    
-                    alert("Location permission denied")
-                    break;
-                
-                default:
-                    alert(`Authentication failed: ${result.error}`)
-            }}
-    }
-
-    
-
-
-    return (
-        // Main container with deep blue/purple background, mimicking GitHub's dark theme
-        <div className="font-sans min-h-screen bg-[#0d1117] text-white overflow-hidden relative">
-
-            {/* --- NEW: ANIMATED BACKGROUND LAYER (Code/Data Grid) --- */}
-            {/* Requires custom Tailwind setup for bg-grid-white-10 and animate-pulse-slow for true effect */}
-            <div className="absolute inset-0 z-0 opacity-10">
-                <div className="w-full h-full bg-grid-white-10 [background-size:25px_25px] [background-image:linear-gradient(to_right,#ffffff1a_1px,transparent_1px),linear-gradient(to_bottom,#ffffff1a_1px,transparent_1px)]">
-                    {/* Subtle animated gradient overlay for the 'flow' effect and fade out edges */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#0d1117] via-transparent to-[#0d1117]"></div>
-                    
-                    {/* Placeholder for slow, subtle animation on the grid itself */}
-                    {/* <div className="w-full h-full animate-pulse-slow"></div> */}
-                </div>
+        {/* SECTION 1: HERO */}
+        <section className="px-6 py-24 md:py-40 flex flex-col items-center border-b border-white/10">
+          <div className="w-full max-w-7xl">
+            <div className="pt-3">
+              <Hero />
+              <pre className="mt-12 text-xl md:text-2xl uppercase tracking-widest text-white/60" >       Immutable • Decentralized • Tamper-proof • Takedown-resistant</pre> 
             </div>
-            {/* --- END OF NEW ANIMATED BACKGROUND LAYER --- */}
-        
-            {/* --- 1. Top Navigation Bar --- (z-index added for layering above background) */}
-            <header className="px-8 py-4 flex justify-between items-center max-w-7xl mx-auto relative z-10">
-                {/* Navigation Links (Simplified) */}
-                <nav className="flex items-center space-x-6">
-                    {/* Placeholder for Octocat/Logo - Renamed to ImmutableHub */}
-                    <div className="text-2xl font-bold">
-                        <span className="text-white">ImmutableHub</span>
-                    </div>
-                    
-                   
-                
-                    <a  href="https://github.com/immutablehub" className={navLinkClasses}>Open Source</a>
-                     <a  href={process.env.NEXT_PUBLIC_TOKEN_LINK} className={navLinkClasses}>Token</a>
-                     <a  href="/docs" className={navLinkClasses}>Docs</a>
-                    
-            <a 
-              href="https://www.npmjs.com/~itsvelocity" 
-              className="w-9 h-9 flex items-center justify-center bg-white/10 backdrop-blur-md rounded-full border border-white/30 hover:bg-white/20 transition-all hover:scale-110"
-              aria-label="NPM"
-            >
-              <svg className="w-5 h-5 text-white" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M0 7.334v8h6.666v1.332H12v-1.332h12v-8H0zm6.666 6.664H5.334v-4H3.999v4H1.335V8.667h5.331v5.331zm4 0v1.336H8.001V8.667h5.334v5.332h-2.669v-.001zm12.001 0h-1.33v-4h-1.336v4h-1.335v-4h-1.33v4h-2.671V8.667h8.002v5.331zM10.665 10H12v2.667h-1.335V10z"/>
-              </svg>
-            </a>
-                </nav>
-                {/* Action Buttons on the Right */}
-               
-            </header>
+          </div>
+        </section>
+
+        {/* SECTION 2: FEATURES */}
+        <section className="border-b border-white/10 py-24 md:py-32">
+          <div className="max-w-7xl mx-auto px-6">
+            {/* Unified Section Title Spacing */}
+            <div className="mb-16">
+                <h2 className="text-[5vw] leading-[0.85] font-black uppercase tracking-tighter text-white/20">
+                    FEATURES
+                </h2>
+            </div>
             
-            {/* --- 2. Main Content and Hero Section --- */}
-            <main className="flex flex-col items-center justify-start pt-12 text-center max-w-4xl mx-auto relative z-10"> 
-                
-                {/* NEW: Animated Glowing Orb/Node (Requires custom animate-float-slow) */}
-                <div className="absolute -top-10 right-1/4 w-32 h-32 bg-purple-500/30 rounded-full filter blur-3xl opacity-50 animate-float-slow"></div>
-
-                {/* Hero Headline: UPDATED WITH CODE-STYLE SPACE FILLERS */}
-                <h1 className="text-6xl md:text-8xl font-bold tracking-tight leading-none mb-6">
-                    
-                    <span className="text-purple-400 opacity-70">// █ </span> 
-                    Immutable  &  Decentralized  
-                    <span className="text-fuchsia-400 opacity-70">::</span>
-                    <span className="block mt-2">
-                        <span className="text-fuchsia-400 opacity-70">{'{'}</span>
-                        <span className="ml-4">Code</span>
-                        <span className="text-fuchsia-400 opacity-70">{'}'}</span>
-                        <span className="text-purple-400 opacity-70 ml-2">▒</span>
-                    </span>
-                </h1>
-
-                {/* Subtext - Replaced GitHub with ImmutableHub */}
-                <p className="text-lg text-white/80 max-w-2xl mb-10">
-                    Code that you own, Code that persists and is Unhackable
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 border-t border-l border-white/10">
+              {/* Feature 01 */}
+              <div className="p-12 border-b border-r border-white/10 hover:bg-white/[0.02] transition-all">
+                <h3 className="text-xl font-bold uppercase mb-6 text-white tracking-tighter">01 Immutable Code</h3>
+                <p className="text-sm text-white/50 leading-relaxed font-sans">
+                  Once deployed, your code becomes permanent and unalterable. Every version is cryptographically sealed for complete integrity.
                 </p>
+              </div>
 
-                {/* Action Block - Only the button remains */}
-                <div className="mt-4">
-                    
-                    <div className="items-center justify-center p-20"  style={{ background: '',minHeight: '20vh'}}>
+              {/* Feature 02 */}
+              <div className="p-12 border-b border-r border-white/10 hover:bg-white/[0.02] transition-all">
+                <h3 className="text-xl font-bold uppercase mb-6 text-white tracking-tighter">02 Decentralized</h3>
+                <p className="text-sm text-white/50 leading-relaxed font-sans">
+                  Your code lives across a distributed network. No central authority can control, modify, or restrict access to your work.
+                </p>
+              </div>
 
-                    
-                    <button
-                        onClick={() => setShowPopup(true)}
-                        className="
-                            px-10 py-1
-                            text-lg font-bold
-                            uppercase tracking-widest 
-                            rounded-lg 
-                            transition duration-300 ease-in-out
-                            
-                            bg-white/10 backdrop-blur-md 
-                            border border-purple-500/50
-                            
-                            text-white 
-                            /* Enhanced Base Shadow */
-                            shadow-[0_0_15px_rgba(168,85,247,0.7)] 
-                            
-                            /* New: More vibrant, dual-color glow on hover */
-                            hover:bg-white/20 
-                            hover:border-fuchsia-500/70
-                            hover:shadow-[0_0_20px_rgba(236,72,153,1),_0_0_40px_rgba(168,85,247,0.7)] 
-                            
-                            transform hover:scale-[1.05]
-                        "
-                        >
-                        Connect Wallet
-                    </button>
-                    
-                    {showPopup && (
-                        
-                        <div 
-                            className="fixed inset-0 z-50 bg-black bg-opacity-80 flex items-center justify-center p-2 backdrop-blur-sm"
-                            onClick={() => setShowPopup(false)}
-                        >
-                            
-                        <div 
-                            className="bg-gray-900/95 p-6 rounded-xl shadow-[0_0_40px_rgba(124,58,237,0.9)] w-full max-w-sm border border-purple-700/70"
-                            onClick={(e) => e.stopPropagation()}
-                        >
-                        <div className="flex justify-between items-center mb-2">
-                        <h2 className="text-2xl font-bold text-white tracking-wide">
-                                    Connect Wallet 
-                        </h2>
-                        <button 
-                            onClick={() => setShowPopup(false)}
-                            className="text-gray-400 hover:text-white transition duration-200 p-1"
-                            aria-label="Close"
-                        >
-                             {/* Close Icon (X) */}
-                             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                        </button>
-                        </div>
-                                    
-                                
-                        <div className="space-y-3">
-                        {wallets.map((wallet,index) => (
+              {/* Feature 03 */}
+              <div className="p-12 border-b border-r border-white/10 hover:bg-white/[0.02] transition-all">
+                <h3 className="text-xl font-bold uppercase mb-6 text-white tracking-tighter">03 Tamper Proof</h3>
+                <p className="text-sm text-white/50 leading-relaxed font-sans">
+                  Advanced cryptographic validation ensures every line remains exactly as intended. Modifications are instantly rejected.
+                </p>
+              </div>
 
-                        <button
-                    
-                            key={wallet}
-                            onClick={()=>LOGGER(wallet)}
-                            className="
-                                flex items-center justify-start gap-3
-                                w-full p-3
-                                rounded-lg 
-                                transition duration-200 
-                                bg-gray-800/80 
-                                border border-transparent
-                                hover:bg-purple-600/30 
-                                hover:border-fuchsia-500 
-                                shadow-md
-                                hover:scale-[1.02]
-                            "
-                            >
-                
-                        <img 
-                            src={getWalletIcon(wallet)} 
-                            alt={`${wallet} icon`}
-                            className="w-8 h-8 rounded-md"
-                        />
-                    
-                    
-                        <span className="text-lg font-semibold text-white font-mono">
-                            {wallet.toUpperCase()}
-                        </span>
-
-                        </button>
-                    ))}
-                        </div>
-
-                        {wallets.length === 0 && (
-                            <p className="text-center text-gray-400 pt-4">No wallets detected. Please install a Solana wallet extension (e.g., Phantom or Solflare).</p>
-                            )}
-                        </div>
-                        </div>
-                        )}
-                    </div>
-                </div>
-
-                <ProHeroSection/>
-                <TimelineRoadmap/>
-
-            </main>
-            
-            {/* Original Optional: Add placeholder clouds/swirls (now replaced by the background layer) */}
-            <div className="absolute top-0 left-0 w-full h-full -z-10 pointer-events-none opacity-50">
-                {/* Original Placeholder: kept for complex visuals that float *above* the grid layer */}
-                <div className="absolute top-20 left-0 w-96 h-96 bg-blue-500/10 rounded-full filter blur-3xl opacity-50"></div>
-                <div className="absolute bottom-0 right-0 w-80 h-80 bg-purple-500/10 rounded-full filter blur-3xl opacity-50"></div>
+              {/* Feature 04 */}
+              <div className="p-12 border-b border-r border-white/10 hover:bg-white/[0.02] transition-all">
+                <h3 className="text-xl font-bold uppercase mb-6 text-white tracking-tighter">04 Takedown Resistant</h3>
+                <p className="text-sm text-white/50 leading-relaxed font-sans">
+                  Your code cannot be censored or removed. It persists indefinitely across the network, providing true permanence.
+                </p>
+              </div>
             </div>
-        </div>
-    );
+          </div>
+        </section>
+
+        {/* SECTION 3: ROADMAP */}
+        <section className="py-24 md:py-32 border-b border-white/10">
+          <div className="max-w-7xl mx-auto px-6">
+            <div className="mb-16">
+                
+            </div>
+            <TimelineRoadmap />
+          </div>
+        </section>
+         
+       
+      </main>
+
+      <style jsx global>{`
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;700&display=swap');
+        
+        body {
+          font-family: 'Space Grotesk', sans-serif;
+        }
+
+        ::-webkit-scrollbar {
+          width: 4px;
+        }
+        ::-webkit-scrollbar-track {
+          background: #050505;
+        }
+        ::-webkit-scrollbar-thumb {
+          background: #333;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+          background: #fff;
+        }
+      `}</style>
+    </div>
+  );
 }

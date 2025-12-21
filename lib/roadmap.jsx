@@ -4,7 +4,7 @@ const TimelineRoadmap = () => {
     const [activePhase, setActivePhase] = useState(1);
 
     const T = {
-        background: '#0d1117',
+        background: '',
         cardBackground: '#161b22',
         textPrimary: '#e6edf3',
         textSecondary: '#7d8590',
@@ -31,6 +31,7 @@ const TimelineRoadmap = () => {
         title: {
             fontSize: '72px',
             fontWeight: 700,
+            font:'sans',
             color: T.textPrimary,
             marginBottom: '20px',
             letterSpacing: '-0.03em',
@@ -197,9 +198,11 @@ const TimelineRoadmap = () => {
         <section style={styles.section}>
             <div style={styles.container}>
                 <div style={styles.header}>
-                    <h1 style={styles.title}>Roadmap</h1>
+            <h1 className="text-[5vw] leading-[0.85] font-black uppercase tracking-tighter text-white/20 -mt-2">
+                ROADMAP
+            </h1>
                     <p style={styles.subtitle}>
-                        Building the future of development, one phase at a time
+                        Building the future of development, one phase at a time.
                     </p>
                 </div>
 
