@@ -20,20 +20,15 @@ export default function Home() {
 
   useEffect(() => {
     const token = localStorage.getItem("vjwt")
-    //alert("run")
     if (!token) {
       router.replace("/")
       return
     }
+    else if(token){
 
-    try {
-      
       router.replace("/dashboard")
-    } catch {
-      //localStorage.removeItem("vjwt")
-      router.replace("/")
-    }
-  }, [token])
+
+    }}, [token])
 
   return (
     <div className="min-h-screen bg-[#050505] text-[#E0E0E0] font-mono selection:bg-white selection:text-black">
