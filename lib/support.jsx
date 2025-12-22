@@ -67,19 +67,19 @@ const SupportSection = () => {
         </p>
 
         <Link
-          href="https://discord.gg/YOUR_DISCORD_INVITE"
+          href="/"
           target="_blank"
           style={styles.link}
         >
-          <span style={styles.accent}>#</span> Join Discord
+          <span style={styles.accent}>#</span> Join Discord[coming soon]
         </Link>
 
         <Link
-          href="https://t.me/YOUR_TELEGRAM_LINK"
+          href="/"
           target="_blank"
           style={styles.link}
         >
-          <span style={styles.accent}>→</span> Join Telegram
+          <span style={styles.accent}>→</span> Join Telegram[coming soon]
         </Link>
       </div>
     </div>
