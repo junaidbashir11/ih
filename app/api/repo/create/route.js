@@ -58,13 +58,13 @@ export async function  POST(request) {
             }})
 
     return NextResponse.json(
-        {"status_":true},
+        {"done":true},
         {headers:CORS_HEADERS}
     )
 
     }catch(e){
          return NextResponse.json(
-        {"status_":false},
+        {"done":false},
         {headers:CORS_HEADERS}
         )
 

@@ -77,6 +77,11 @@ async function getFolders(targetManifestId){
     });
     let folders=[]
     let uploads=[]
+
+    if(!doc) {
+        return { uploads: [{folder:"",data:[]}] };
+    }
+
     if(doc) {
 
         let manifests=doc.manifests
@@ -109,15 +114,15 @@ const uploads = await Promise.all(
      uploads.push({"data":data,"folder":fname})
 
   }
-*/
+*/ 
 
-   console.log(uploads)
-
+   //console.log(uploads)
+   
    return {uploads}
 
     }
 
-
+  //console.log(uploads)
 
 }
 

@@ -8,6 +8,7 @@ export default function FolderPage() {
 
   const { uploads, loading } = useRepoData();
 
+   
   //if (loading) return <div className="bg-black-500">Loading…</div>;
    if (loading) return  ( <div className="flex items-center justify-center h-screen bg-black">
       <div className="animate-spin h-8 w-8 rounded-full border-4 border-white border-t-transparent" />

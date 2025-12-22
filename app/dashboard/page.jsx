@@ -105,24 +105,25 @@ const GithubProDashboard = () => {
         }
         else {
 
-        let url=""
+        //let url=""
         if(version=="normal"){
 
             setIsCreating(true)
-            url="/api/repo/create"
+            console.log("ccccc")
+            let url="/api/repo/create"
             let request=await fetch(url,{
             mode:"cors",
             method:"post",
-            body:JSON.stringify({"wallet":decoded.sub,"foldername":folderName}),
+            body:JSON.stringify({"wallet":decoded,"foldername":folderName}),
             headers:{
                 "content-type":"application/json"
             }
         })
             let response=await request.json()
-            if(response.success==true){
+            if(response.done==true){
                 alert("repo created , check the repo section")
             }
-            else if (response.success==false){
+            else if (response.done==false){
                 alert("repo not created , error")
             }
             setIsCreating(false)
