@@ -11,7 +11,7 @@ import DocsSection from "../../lib/docs";
 import SupportSection from "../../lib/support";
 import { useRouter } from "next/navigation";
 
-
+export const dynamic = "force-dynamic";
 const GithubProDashboard = () => {
 
     const [activeTab, setActiveTab] = useState('account');
@@ -24,9 +24,10 @@ const GithubProDashboard = () => {
     const [prompt,setPrompt]=useState("")
     const [checked, setChecked] = useState(false)
     const router = useRouter();
-    const decoded = typeof window !== "undefined"
-  ? jwtDecode(localStorage.getItem("vjwt"))
-  : null;
+    const [decoded,setDecoded]=useState("")
+
+ 
+   
 
     useEffect(() => {
     const token = localStorage.getItem("vjwt")
@@ -37,9 +38,7 @@ const GithubProDashboard = () => {
     }
     else if(token){
       const decodedobj = jwtDecode(token)
-      //setDecoded(decoded)
-
-
+      setDecoded(decodedobj.sub)
 
         async function checkRepos(){
         let request=await fetch(`/api/repocheck/${decodedobj.sub}`,{
@@ -610,7 +609,7 @@ const GithubProDashboard = () => {
                         padding: '15px',
                         borderLeft: `2px solid ${T.accentBlue || '#555'}` 
                     }}>
-                        {decoded.sub}
+                        {decoded}
                     </div>
                 </div>
 
