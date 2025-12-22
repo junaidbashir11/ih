@@ -13,18 +13,20 @@ import { useRouter } from "next/navigation";
 
 
 const GithubProDashboard = () => {
+
     const [activeTab, setActiveTab] = useState('account');
     const [hoveredCard, setHoveredCard] = useState(null);
     const [folderName, setFolderName] = useState('');
     const [isCreating, setIsCreating] = useState(false);
     const [uploads,setUploads]=useState("")
-    const [decoded,setDecoded] =useState(null)
+    //const [decoded,setDecoded] =useState(null)
     const [version,setVersion]=useState("normal")
     const [prompt,setPrompt]=useState("")
     const [checked, setChecked] = useState(false)
     const router = useRouter();
-
-
+    const decoded = typeof window !== "undefined"
+  ? jwtDecode(localStorage.getItem("vjwt"))
+  : null;
 
     useEffect(() => {
     const token = localStorage.getItem("vjwt")
@@ -34,15 +36,13 @@ const GithubProDashboard = () => {
       return
     }
     else if(token){
-      const decoded = jwtDecode(token)
-      setDecoded(decoded)
-    }
-    
-  }, [])
-    
+      const decodedobj = jwtDecode(token)
+      //setDecoded(decoded)
 
-     async function checkRepos(){
-        let request=await fetch(`/api/repocheck/${decoded.sub}`,{
+
+
+        async function checkRepos(){
+        let request=await fetch(`/api/repocheck/${decodedobj.sub}`,{
           method:"GET",
           headers:{
 
@@ -59,7 +59,7 @@ const GithubProDashboard = () => {
     }
 
     const repoData=async ()=>{
-        let request=await fetch(`/api/data/${decoded.sub}`,{
+        let request=await fetch(`/api/data/${decodedobj.sub}`,{
 
             headers:{
                 "content-type":"application/json"
@@ -75,12 +75,21 @@ const GithubProDashboard = () => {
         }
     }
 
-    useEffect(()=>{
+       checkRepos()
+       repoData()
 
-        checkRepos()
-        repoData()
 
-    },[])
+
+    }
+    
+  }, [])
+    
+     console.log(decoded)
+
+
+  
+
+   
 
     ////{activeTab === 'create-repo' && <CreateRepoContent styles={styles} T={T} />}
     
@@ -553,7 +562,7 @@ const GithubProDashboard = () => {
             <div style={{ ...styles.breadcrumb, textTransform: 'uppercase', letterSpacing: '0.2em', fontSize: '10px', opacity: 0.5 }}>
                 <span>Settings</span>
                 <span style={{ margin: '0 10px' }}>//</span>
-                <span style={{ color: T.textPrimary }}>Account_Protocol</span>
+                <span style={{ color: T.textPrimary }}>Account</span>
             </div>
             <h1 style={{ ...styles.pageTitle, fontSize: '48px', fontWeight: '900', textTransform: 'uppercase', letterSpacing: '-0.02em', margin: '10px 0' }}>
                 System Identity
@@ -601,7 +610,7 @@ const GithubProDashboard = () => {
                         padding: '15px',
                         borderLeft: `2px solid ${T.accentBlue || '#555'}` 
                     }}>
-                        {decoded ? decoded.sub : "NO_SESSION_DETECTED"}
+                        {decoded.sub}
                     </div>
                 </div>
 

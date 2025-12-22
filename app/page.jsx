@@ -19,12 +19,12 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    const token = localStorage.getItem("vjwt")
-    if (!token) {
+    //const tkn = localStorage.getItem("vjwt")
+    if (token==null) {
       router.replace("/")
       return
     }
-    else if(token){
+    else if(token !=null){
 
       router.replace("/dashboard")
 

@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { detectWallets, getGeolocationData, VelocityAuth } from "velocitytunedx401";
 import { Link, Zap, RefreshCw, ArrowRight, Sparkles, GithubIcon, Martini, Key, Code, Terminal, Server, TrendingUp, Cpu, Users } from "lucide-react";
 import TypingDiv from "@/lib/typ";
+import { useRouter } from "next/navigation";
 const Header = () => {
   // --- Typing Logic for "Hub" ---
   const [text, setText] = useState("Hub");
@@ -14,6 +15,8 @@ const Header = () => {
   const [wallets, setWallets] = useState([]);
   const [location, setLocation] = useState({ latitude: null, longitude: null });
   const [token, setToken] = useState(null);
+   const router = useRouter();
+
 
   useEffect(() => {
     const currentWord = words[index % words.length];
@@ -32,6 +35,25 @@ const Header = () => {
     }, isDeleting ? 50 : 150);
     return () => clearTimeout(timeout);
   }, [text, isDeleting, index]);
+
+/*
+   useEffect(() => {
+    setToken(localStorage.getItem("vjwt"));
+     if(token !=null){
+
+      router.replace("/dashboard")
+
+    }
+  }, []);
+
+*/  
+  useEffect(() => {
+  const t = localStorage.getItem("vjwt");
+
+  if (t) {
+    router.replace("/dashboard");
+  }
+}, []);
 
 
   
@@ -63,6 +85,7 @@ const Header = () => {
       if(result.alreadyAuthenticated) {
         alert("already authenticated")
         console.log(result.token)
+        router.replace("/dashboard")
 
     }
     else if(result.alreadyAuthenticated==false){
@@ -70,6 +93,7 @@ const Header = () => {
         console.log(result.token)
         localStorage.setItem("vjwt",result.token)
         alert("authenticated")
+        router.replace("/dashboard")
 
         // RUN YOUR CUSTOM LOGIC HERE 
     }
