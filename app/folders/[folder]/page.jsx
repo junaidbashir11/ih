@@ -45,8 +45,8 @@ const navLinkClasses ="text-sm font-medium text-white/80 hover:text-white transi
             </Link>
             
             <nav className="flex items-center space-x-6">
-                 <a href={process.env.NEXT_PUBLIC_TOKEN_LINK} className={navLinkClasses}>Token</a>
-                 <a className={navLinkClasses}>Docs</a>
+                
+                 <a href="/docs" className={navLinkClasses}>Docs</a>
                   <Link href="/dashboard" className="text-cyan-500 font-mono text-sm" >Dash</Link>
             </nav>
 
