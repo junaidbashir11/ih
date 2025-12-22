@@ -33,21 +33,16 @@ const GithubProDashboard = () => {
       router.replace("/")
       return
     }
-
-    try {
+    else if(token){
       const decoded = jwtDecode(token)
-      //setChecked(true)
       setDecoded(decoded)
-    } catch {
-      //localStorage.removeItem("vjwt")
-      router.replace("/")
     }
+    
   }, [])
     
 
-
      async function checkRepos(){
-        let request=await fetch(`http://localhost:3000/api/repocheck/${'HYUFyAnmGKsm6Qwjp5D2U6VyNNcCt4UpBox2occw5vLj'}`,{
+        let request=await fetch(`/api/repocheck/${decoded.sub}`,{
           method:"GET",
           headers:{
 
@@ -64,7 +59,7 @@ const GithubProDashboard = () => {
     }
 
     const repoData=async ()=>{
-        let request=await fetch("http://localhost:3000/api/data/HYUFyAnmGKsm6Qwjp5D2U6VyNNcCt4UpBox2occw5vLj",{
+        let request=await fetch(`/api/data/${decoded.sub}`,{
 
             headers:{
                 "content-type":"application/json"
@@ -110,7 +105,7 @@ const GithubProDashboard = () => {
             let request=await fetch(url,{
             mode:"cors",
             method:"post",
-            body:JSON.stringify({"wallet":"HYUFyAnmGKsm6Qwjp5D2U6VyNNcCt4UpBox2occw5vLj","foldername":folderName}),
+            body:JSON.stringify({"wallet":decoded.sub,"foldername":folderName}),
             headers:{
                 "content-type":"application/json"
             }
