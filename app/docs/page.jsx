@@ -20,8 +20,8 @@ const DocsSection = () => {
   const styles = {
   wrapper: {
     minHeight: "100vh",
-    background: "",
-    color: "rgba(10, 12, 16, 0.5)",
+    background: "black",
+    color: "white",
     display: "flex",
     fontFamily: '"Inter", "JetBrains Mono", monospace',
     position: 'relative',
