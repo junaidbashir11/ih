@@ -79,7 +79,7 @@ async function getFolders(targetManifestId){
     let uploads=[]
 
     if(!doc) {
-        return { uploads: [{folder:"",data:[]}] };
+        return { uploads: [{folder:"No Repos",data:[]}] };
     }
 
     if(doc) {

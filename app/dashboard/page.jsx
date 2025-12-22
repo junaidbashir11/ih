@@ -6,7 +6,8 @@ import { jwtDecode } from "jwt-decode";
 import { useState,useEffect } from 'react';
 
 import Link from "next/link";
-import ProCLISection from "../../lib/cli-features";
+//import ProCLISection from "../../lib/cli-features";
+import FolderPage from "../../lib/cli-features"
 import DocsSection from "../../lib/docs";
 import SupportSection from "../../lib/support";
 import { useRouter } from "next/navigation";
@@ -163,6 +164,16 @@ const GithubProDashboard = () => {
 
     }
     }
+
+
+
+    const logout=()=>{
+
+        router.replace("/")
+        localStorage.removeItem("vjwt")
+
+    }
+
 
 
     const T = {
@@ -650,30 +661,10 @@ const GithubProDashboard = () => {
                 {localStorage.getItem("repos")=="yes"?(
                     <div>
 
-<Link
-  href="/folders"
-  className="
-    flex items-center justify-between
-    w-full max-w-sm
-    px-6 py-3
-    rounded-xl
-    border border-orange-500/30
-    text-orange-500 font-mono text-lg
-    hover:bg-orange-500/10
-    hover:shadow-lg
-    transition
-    cursor-pointer
-  "
->
-  <div className="flex items-center gap-3">
-    <span className="text-2xl">^</span>
-    <span>[]REPOSITORIES</span>
-  </div>
-  <span className="text-orange-400 text-xl">{'→'}</span>
-</Link>
+
 
                    
-                    <ProCLISection/>
+                    <FolderPage/>
 
                     </div>
 
@@ -821,12 +812,17 @@ const GithubProDashboard = () => {
 >
   <span style={styles.navIcon}>!</span>
   Support
+</button><br/><br/><br/><br/>
+
+<center>
+<button onClick={()=>logout()} className="px-8 py-2 text-sm font-black uppercase tracking-[0.3em] bg-white text-black border border-white hover:bg-transparent hover:text-white transition duration-200 ease-in-out">
+    LOGOUT
 </button>
+</center>
 
-
-    </div>
-                </nav>
-            </aside>
+</div>
+</nav>
+</aside>
 
             <main style={styles.mainContent}>
                 <div style={styles.topBar}>
@@ -847,9 +843,8 @@ const GithubProDashboard = () => {
   
     <div style={{ ...styles.pageHeader, borderLeft: `4px solid ${T.textPrimary}`, paddingLeft: '20px', marginBottom: '40px' }}>
       <div style={styles.breadcrumb}>
-        <span style={styles.breadcrumbLink}>SETTINGS</span>
-        <span style={styles.breadcrumbSeparator}>//</span>
-        <span style={styles.breadcrumbActive}>REPO_INITIALIZATION</span>
+        
+        <span style={styles.breadcrumbActive}>REPO INITIALIZATION</span>
       </div>
       <h1 style={{ ...styles.pageTitle, fontSize: '48px', fontWeight: '900', textTransform: 'uppercase', letterSpacing: '-0.02em', margin: '10px 0' }}>
                 CREATE NEW REPO
@@ -883,13 +878,14 @@ const GithubProDashboard = () => {
        
           
          <button
-         style={styles.buttonPrimary}
+         //style={styles.buttonPrimary}
+         className="px-5 py-2 text-sm font-black uppercase tracking-[0.3em] text-white  border border-white hover:bg-white hover:text-black transition duration-200 ease-in-out"
          onClick={()=>handleCreateRepo()}
 
          >
-            create repo
+            CREATE REPO
          </button>
-          <button style={styles.buttonSecondary} onClick={() => setActiveTab('repos')}>
+          <button className="px-5 py-2 text-sm font-black uppercase tracking-[0.3em] text-white  border border-white hover:bg-white hover:text-black transition duration-200 ease-in-out" onClick={() => setActiveTab('repos')}>
             CANCEL
           </button>
         </div> <br/><br/>

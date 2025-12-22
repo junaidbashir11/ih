@@ -1,126 +1,97 @@
 "use client";
-import React from "react";
-import { motion } from "framer-motion";
 
-const ProCLISection = () => {
+import Link from "next/link";
+import { useRepoData } from "@/lib/useRepoData";
+
+export default function FolderPage() {
+  
+
+  const { uploads, loading } = useRepoData();
+
+   
+  //if (loading) return <div className="bg-black-500">Loading…</div>;
+   if (loading) return  ( <div className="flex items-center justify-center h-screen bg-black">
+      <div className="animate-spin h-8 w-8 rounded-full border-4 border-white border-t-transparent" />
+      <span className="ml-3 text-white">Loading repository…</span>
+    </div>
+  )
+ 
+
+
+
+  const theme = {
+    bg: "bg-gradient-to-br from-[#0a0a0d] via-[#0e0e14] to-[#050507]",
+    //bg:"bg-darkgray-500",
+    card: "bg-[#101014] border border-[#303036]",
+    textPrimary: "text-white",
+    textSecondary: "text-[#a0a0a9]",
+    accent: "text-[#A359FF]",
+    hover: "hover:bg-[#1c1c22]",
+  };
+
+
+  const navLinkClasses ="text-sm font-medium text-white/80 hover:text-white transition-colors cursor-pointer flex items-center gap-1";
   return (
-    <section style={{
-      backgroundColor: "",
-      height: "100vh",
-      width: "100%",
-      display: "flex",
-      flexDirection: "column",
-      justifyContent: "center",
-      alignItems: "center",
-      overflow: "hidden",
-      color: "#fff",
-      fontFamily: '"Inter", "Impact", sans-serif',
-      position: "relative",
-      padding: "0 4vw"
-    }}>
-      {/* TOP DECORATIVE BAR (From Image) */}
-      <div style={{
-        position: "absolute",
-        top: "40px",
-        width: "92%",
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
-        borderTop: "1px solid rgba(255,255,255,0.1)",
-        paddingTop: "10px",
-        fontSize: "12px",
-        letterSpacing: "0.4em",
-        color: "#444"
-      }}>
-        <span>IMMUTABLEHUB</span>
-        <span>V.2025</span>
-      </div>
+    <div className={`${theme.bg} min-h-screen px-6 py-20`}>
+      <div className="max-w-5xl mx-auto">
+        {/* Header */}
 
-      {/* MAIN TYPOGRAPHIC STACK */}
-      <div style={{ textAlign: "center", width: "100%", maxWidth: "1400px" }}>
-        <motion.h1
-          initial={{ y: 40, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-          style={{
-            fontSize: "clamp(80px, 16vw, 240px)",
-            fontWeight: 900,
-            lineHeight: 0.75,
-            margin: 0,
-            letterSpacing: "-0.06em",
-            textTransform: "uppercase"
-          }}
-        >
-        </motion.h1>
+    
+        <header className="flex justify-between items-center pb-8 border-b border-[#303036] mb-10">
+            <Link href="/" className="text-3xl font-extrabold tracking-tight flex items-center gap-3">
+                <span className={`text-white bg-clip-text`}>ImmutableHub</span>
+                <span className={`text-xl font-medium ${theme.textSecondary}`}>— Repos</span>
+            </Link>
+            
+            <nav className="flex items-center space-x-6">
+                 <a  href="/docs" className={navLinkClasses}>Docs</a>
+            </nav>
+        </header>
 
-        <motion.h1
-          initial={{ y: 40, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.6, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-          style={{
-            fontSize: "clamp(50px, 10vw, 100px)",
-            fontWeight: 900,
-            lineHeight: 0.75,
-            margin: 0,
-            letterSpacing: "-0.06em",
-            textTransform: "uppercase",
-            color: "#31363f" // Muted Grey from your image
-          }}
-        >
-        
-        </motion.h1>
 
-        {/* SUBTEXT (From Image) */}
-        <div style={{
-          marginTop: "40px",
-          textAlign: "left",
-          maxWidth: "450px",
-          marginLeft: "auto",
-          marginRight: "auto"
-        }}>
-         
-          
-          {/* THE BLUE "IMMUTABILITY" PULSE (Minimalist Accent) */}
-          <motion.div
-            animate={{ opacity: [0.2, 1, 0.2] }}
-            transition={{ duration: 0.1, repeat: Infinity, repeatDelay: 3 }}
-            style={{
-              marginTop: "10px",
-              height: "2px",
-              width: "40px",
-              background: "#3b82f6",
-              boxShadow: "0 0 15px #3b82f6"
-            }}
-          />
+
+        {/* Folder Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {uploads.map((f) => (
+            <Link
+              key={f.folder}
+              href={`/folders/${encodeURIComponent(f.folder)}`}
+              className={`
+                ${theme.card}
+                ${theme.hover}
+                rounded-xl p-6 transition-all duration-200
+                group
+              `}
+            >
+              <div className="flex items-center justify-between">
+                <div>
+                  <h2
+                    className={`text-lg font-semibold ${theme.textPrimary} group-hover:${theme.accent}`}
+                  >
+                    {f.folder}
+                  </h2>
+                  <p className={`text-sm ${theme.textSecondary} mt-1`}>
+                    {f.data?.length || 0} objects
+                  </p>
+                </div>
+
+                <div
+                  className={`text-2xl ${theme.accent} opacity-70 group-hover:opacity-100`}
+                >
+                  ⟶
+                </div>
+              </div>
+            </Link>
+          ))}
         </div>
+
+        {/* Empty state */}
+        {uploads.length === 0 && (
+          <div className={`mt-20 text-center ${theme.textSecondary}`}>
+            Loading ....
+          </div>
+        )}
       </div>
-
-      {/* BACKGROUND GRID OVERLAY (SUBTLE) */}
-      <div style={{
-        position: "absolute",
-        inset: 0,
-        zIndex: -1,
-        backgroundImage: "radial-gradient(circle at 2px 2px, #111 1px, transparent 0)",
-        backgroundSize: "40px 40px",
-        maskImage: "radial-gradient(ellipse at center, black, transparent 80%)"
-      }} />
-
-      {/* F1 STYLE SCANLINE */}
-      <motion.div
-        animate={{ y: ["-100%", "300%"] }}
-        transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-        style={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          width: "100%",
-          height: "10px",
-          background: "linear-gradient(90deg, transparent, #3b82f6, transparent)",
-          opacity: 0.2
-        }}
-      />
-    </section>
+    </div>
   );
-};
-
-export default ProCLISection;
+}
