@@ -21,7 +21,7 @@ const DocsSection = () => {
   wrapper: {
     minHeight: "100vh",
     background: "",
-    color: "#fff",
+    color: "rgba(10, 12, 16, 0.5)",
     display: "flex",
     fontFamily: '"Inter", "JetBrains Mono", monospace',
     position: 'relative',
