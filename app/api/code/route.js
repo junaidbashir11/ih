@@ -1,7 +1,7 @@
 import { Groq } from 'groq-sdk';
 import {NextResponse} from "next/server"
 const groq = new Groq({
-    apiKey:process.env.NEXT_PUBLIC_GROQ
+    apiKey:process.env.GROQ_API_KEY
 });
 
 
