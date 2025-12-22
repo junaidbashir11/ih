@@ -1,11 +1,10 @@
-"use client";
 import { useState } from "react";
 
 const DocsSection = () => {
   const [activeStep, setActiveStep] = useState(0);
 
   const T = {
-    bg:'#0d1117',
+    bg: "",
     cardBg: "rgba(10, 12, 16, 0.5)",
     border: "#1a1a1a",
     textPrimary: "#ffffff",
@@ -19,7 +18,7 @@ const DocsSection = () => {
   const styles = {
   wrapper: {
     minHeight: "100vh",
-    background: T.bg,
+    background: "",
     color: "#fff",
     display: "flex",
     fontFamily: '"Inter", "JetBrains Mono", monospace',
@@ -138,6 +137,11 @@ const DocsSection = () => {
   }
 };
 const steps = [
+
+  
+
+    
+
     {
       title: "Create or select a project",
       desc: "Start by creating a new project or navigating to an existing one.",
@@ -148,10 +152,16 @@ const steps = [
       desc: "Initialize an empty Git repository in your project directory.",
       command: "git init",
     },
+
+     {
+      title: "Install immutablehub cli ",
+      desc: "Install immutablehub [ihub-cli] package",
+      command: "npm i -g ihub-cli",
+    },
     {
       title: "Login using CLI",
       desc: "Authenticate your wallet using the ImmutableHub CLI.",
-      command: "npx ihub op login <wallet-address>",
+      command: "ihub op login <wallet-address>",
     },
     {
       title: "Commit your changes",
@@ -161,12 +171,12 @@ const steps = [
     {
       title: "Push code",
       desc: "Push your repository to immutable decentralized storage.",
-      command: "npx ihub op push <repo-path>",
+      command: "ihub op push <repo-path>",
     },
     {
       title: "Clone repository",
       desc: "Clone an existing repository. Use --new true for first-time setup.",
-      command: "npx ihub op clone <repo-name>",
+      command: "ihub op clone <repo-name>",
     },
   ];
 
