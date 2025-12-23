@@ -631,7 +631,7 @@ const GithubProDashboard = () => {
                         <span style={{ color: T.accentYellow, marginRight: '15px', fontWeight: 'bold' }}>{'>_'}</span> 
                         <span style={{ color: 'rgba(255,255,255,0.6)' }}>Login via CLI:</span>
                         <code style={{ marginLeft: '10px', color: '#fff', background: 'rgba(255,255,255,0.1)', padding: '2px 8px' }}>
-                            npx ihub op login [walletaddress]
+                            ihub op login [walletaddress]
                         </code>
                     </p>
                 </div>
